@@ -7,6 +7,8 @@
 </head>
 
 <body>
+    <!-- we need nav coords incase the position changes because of the screen size or we go in an add something different later on-->
+    <h2> Helloooooooooooooo</h2>
 
     <nav class="top">
         <div class="dropdownBackground">
@@ -181,10 +183,10 @@
         opacity: 1;
     }
 
-    .open {
+    /* .open {
         margin-top: 50px;
         margin-left: 50px;
-    }
+    } */
 
     .arrow {
         position: absolute;
@@ -257,10 +259,37 @@
             // }, 150);
 
             // where as a callback function inherits
-            setTimeout(() => this.classList.add('trigger-enter-active'), 150);
+            // one way of writing it using an if statement
+            // setTimeout(() => {
+            //     if(this.classList.contains('trigger-enter')) {
+            //         this.classList.add('trigger-enter-active')
+            //     }
+            // }, 150);
+
+            setTimeout(() => this.classList.contains('trigger-enter') && this.classList.add('trigger-enter-active'), 150);
             
             // to add the white background when the mouse enters the links
             background.classList.add('open');
+
+            // we do this here and not outside of the function because the mouseenter defines which dropdown it it
+            const dropdown = this.querySelector(".dropdown");
+            // console.log(dropdown);
+
+            const dropdownCoords = dropdown.getBoundingClientRect();
+            // console.log(dropdownCoords);
+            const navCoords = nav.getBoundingClientRect();
+            console.log(navCoords);
+
+            const coords = {
+                height: dropdownCoords.height,
+                width: dropdownCoords.width,
+                top: dropdownCoords.top - navCoords.top,
+                left: dropdownCoords.left - navCoords.left
+            };
+            // sets the size of the span in order to match the height and width of the lists the appear on mouseenter
+            background.style.setProperty('width', `${coords.width}px`)
+            background.style.setProperty('height', `${coords.height}px`)
+            background.style.setProperty('transform', `translate(${coords.left}px, ${coords.top}px)`)
         }
 
         function handleLeave() {
